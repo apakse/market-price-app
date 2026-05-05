@@ -667,10 +667,10 @@ with st.sidebar:
 # ════════════════════════════════════════════════════════════════════════════
 # HEADER
 # ════════════════════════════════════════════════════════════════════════════
-st.title("🌽 Market Price Monitor")
-st.caption(
-    "Agricultural market price live data - Send mail to msu@srid.mofa.gov.gh for validated data"
-)
+# st.title("🌽 Market Price Monitor")
+# st.caption(
+# "Agricultural market price live data - Send mail to msu@srid.mofa.gov.gh for validated data"
+# )
 
 # ── Download ──────────────────────────────────────────────────────────────────
 if download_btn:
@@ -707,7 +707,9 @@ df = st.session_state["df"]
 # ════════════════════════════════════════════════════════════════════════════
 # TABS
 # ════════════════════════════════════════════════════════════════════════════
-tab1, tab2, tab3 = st.tabs(["📊 Data", "🗺️ Regional Map & Prediction", "💾 Export"])
+tab1, tab2, tab3 = st.tabs(
+    ["### 📊 Data", "### 🗺️ Regional Map & Prediction", "### 💾 Export"]
+)
 
 # ── TAB 1: Data ───────────────────────────────────────────────────────────────
 with tab1:
@@ -1038,4 +1040,6 @@ with tab3:
         )
 
 st.markdown("---")
-st.caption("Built on Live data from markets, validated data may change")
+st.caption(
+    "Built on Agricultural market price live data - Send mail to msu@srid.mofa.gov.gh for validated data"
+)
