@@ -6,7 +6,7 @@ from datetime import datetime
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Market Price Monitor",
+    page_title="MOFA SRID Market Price Monitor",
     page_icon="🌽",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -22,86 +22,90 @@ h1 { font-weight: 600; letter-spacing: -0.5px; }
     unsafe_allow_html=True,
 )
 
-# ── Commodity labels ──────────────────────────────────────────────────────────
-LABELS = {
-    "average_white_maize": "Maize (White)",
-    "average_Maize_Yellow": "Maize (Yellow)",
-    "average_Millet": "Millet",
-    "average_Sorghum": "Sorghum",
-    "average_Rice_Local_perfumed": "Rice Local (perfumed)",
-    "average_Rice_Local_non_perfumed": "Rice Local (non perfumed)",
-    "average_Rice_Imported_perfumed": "Rice Imported (perfumed)",
-    "average_Rice_Imported_non_perfumed": "Rice Imported (non perfumed)",
-    "average_Yam_White": "Yam (White)",
-    "average_Yam_Puna": "Yam (Puna)",
-    "average_Cocoyam": "Cocoyam",
-    "average_Cassava": "Cassava",
-    "average_Gari": "Gari",
-    "average_Dried_Cassava_Powder_Kokonte": "Dried Cassava Powder (Kokonte)",
-    "average_Dried_Cassava_Chips_Kokonte": "Dried Cassava Chips (Kokonte)",
-    "average_Plantain_Apentu": "Plantain (Apentu)",
-    "average_Plantain_Apem": "Plantain (Apem)",
-    "average_Banana_Exotic": "Banana (Exotic)",
-    "average_Banana_Local": "Banana (Local)",
-    "average_Orange": "Orange",
-    "average_Watermelon": "Watermelon",
-    "average_Pineapple": "Pineapple",
-    "average_Mango_Exotic": "Mango (Exotic)",
-    "average_Mango_Local": "Mango (Local)",
-    "average_Coconut_Fresh": "Coconut (Fresh)",
-    "average_Tomato_Local": "Tomato (Local)",
-    "average_Tomato_Navrongo": "Tomato (Navrongo)",
-    "average_Garden_Egg": "Garden Egg",
-    "average_Okro_Fresh": "Okro (Fresh)",
-    "average_Okro_Dried": "Okro (Dried)",
-    "average_Onion": "Onion",
-    "average_Ginger": "Ginger",
-    "average_Dried_Pepper_Legon_18": "Dried Pepper (Legon 18)",
-    "average_Fresh_Pepper_Legon_18": "Fresh Pepper (Legon 18)",
-    "average_Fresh_Pepper_Bonnet": "Fresh Pepper (Bonnet)",
-    "average_Palm_Fruit": "Palm Fruit",
-    "average_Tiger_Nut": "Tiger Nut",
-    "average_Unshelled_Groundnut": "Unshelled Groundnut",
-    "average_Groundnut_Red": "Groundnut (Red)",
-    "average_Cowpea_White": "Cowpea (White)",
-    "average_Soya_Bean": "Soya Bean",
-    "average_Melon_seeds_Agushi": "Melon seeds (Agushi)",
-    "average_Melon_seeds_Agushi_Powder": "Melon seeds (Agushi) Powder",
-    "average_Melon_seeds_Neri": "Melon seeds (Neri)",
-    "average_Melon_seeds_Neri_Powder": "Melon seeds (Neri) Powder",
-    "average_Groundnut_Oil": "Groundnut Oil",
-    "average_Palm_Oil": "Palm Oil",
-    "average_Coconut_Oil": "Coconut Oil",
-    "average_Beef": "Beef",
-    "average_Pork": "Pork",
-    "average_Smoked_Herring": "Smoked Herring",
-    "average_Salted_Dried_Tilapia_Koobi": "Salted Dried Tilapia (Koobi)",
-    "average_Anchovy": "Anchovy",
-    "average_Kako": "Kako",
-    "average_Egg_Commercial": "Egg (Commercial)",
-    "average_Live_Bird": "Live Bird",
-    "average_Chicken": "Chicken",
-    "average_Nkontomire": "Nkontomire",
-    "average_Ademe_Ayoyo_jute_mallow": "Ademe/Ayoyo (jute mallow)",
-    "average_Alefu_Amaranthus": "Alefu (Amaranthus)",
-    "average_Cabbage": "Cabbage",
-    "average_Lettuce": "Lettuce",
-    "average_Carrot": "Carrot",
-    "average_Pawpaw": "Pawpaw",
-    "average_Avocado_Pear": "Avocado Pear",
-    "average_Bambara_Bean": "Bambara Bean",
-    "average_Mutton_Sheep_meat": "Mutton (Sheep meat)",
-    "average_Chevon_Goat_meat": "Chevon (Goat meat)",
-    "average_Snail": "Snail",
-    "average_Sweet_Potato_general_white_pinkish": "Sweet Potato (white/pinkish)",
-    "average_Sweet_Potato_ORANGE": "Sweet Potato (Orange)",
-    "average_Cassava_Dough": "Cassava Dough",
-    "average_Fresh_Cow_Milk": "Fresh Cow Milk",
-    "average_Fresh_Red_Fish": "Fresh Red Fish",
-    "average_Fresh_Salmon_Mackerel_Fish": "Fresh Salmon (Mackerel) Fish",
-    "average_Fresh_Kpanla_Fish": "Fresh Kpanla Fish",
-    "average_Plantain_Riped": "Plantain (Riped)",
-}
+# ── Commodity labels (commodity_code -> (number, name)) ──────────────────────
+# commodity_number matches labels_df.xlsx; used for sorting and export
+LABELS_RAW = [
+    ("average_white_maize", 1, "Maize (White)"),
+    ("average_Maize_Yellow", 2, "Maize (Yellow)"),
+    ("average_Millet", 3, "Millet"),
+    ("average_Sorghum", 4, "Sorghum"),
+    ("average_Rice_Local_perfumed", 5, "Rice Local (perfumed)"),
+    ("average_Rice_Local_non_perfumed", 6, "Rice Local (non perfumed)"),
+    ("average_Rice_Imported_perfumed", 7, "Rice Imported (perfumed)"),
+    ("average_Rice_Imported_non_perfumed", 8, "Rice Imported (non perfumed)"),
+    ("average_Yam_White", 9, "Yam (White)"),
+    ("average_Yam_Puna", 10, "Yam (Puna)"),
+    ("average_Cocoyam", 11, "Cocoyam"),
+    ("average_Cassava", 12, "Cassava"),
+    ("average_Gari", 13, "Gari"),
+    ("average_Dried_Cassava_Powder_Kokonte", 14, "Dried Cassava Powder (Kokonte)"),
+    ("average_Dried_Cassava_Chips_Kokonte", 15, "Dried Cassava Chips (Kokonte)"),
+    ("average_Plantain_Apentu", 16, "Plantain (Apentu)"),
+    ("average_Plantain_Apem", 17, "Plantain (Apem)"),
+    ("average_Banana_Exotic", 18, "Banana (Exotic)"),
+    ("average_Banana_Local", 19, "Banana (Local)"),
+    ("average_Orange", 20, "Orange"),
+    ("average_Watermelon", 21, "Watermelon"),
+    ("average_Pineapple", 22, "Pineapple"),
+    ("average_Mango_Exotic", 23, "Mango (Exotic)"),
+    ("average_Mango_Local", 24, "Mango (Local)"),
+    ("average_Coconut_Fresh", 25, "Coconut (Fresh)"),
+    ("average_Tomato_Local", 26, "Tomato (Local)"),
+    ("average_Tomato_Navrongo", 27, "Tomato (Navrongo)"),
+    ("average_Garden_Egg", 28, "Garden Egg"),
+    ("average_Okro_Fresh", 29, "Okro (Fresh)"),
+    ("average_Okro_Dried", 30, "Okro (Dried)"),
+    ("average_Onion", 31, "Onion"),
+    ("average_Ginger", 32, "Ginger"),
+    ("average_Dried_Pepper_Legon_18", 33, "Dried Pepper (Legon 18)"),
+    ("average_Fresh_Pepper_Legon_18", 34, "Fresh Pepper (Legon 18)"),
+    ("average_Fresh_Pepper_Bonnet", 35, "Fresh Pepper (Bonnet)"),
+    ("average_Palm_Fruit", 36, "Palm Fruit"),
+    ("average_Tiger_Nut", 37, "Tiger Nut"),
+    ("average_Unshelled_Groundnut", 38, "Unshelled Groundnut"),
+    ("average_Groundnut_Red", 39, "Groundnut (Red)"),
+    ("average_Cowpea_White", 40, "Cowpea (White)"),
+    ("average_Soya_Bean", 41, "Soya Bean"),
+    ("average_Melon_seeds_Agushi", 42, "Melon seeds (Agushi)"),
+    ("average_Melon_seeds_Agushi_Powder", 43, "Melon seeds (Agushi) Powder"),
+    ("average_Melon_seeds_Neri", 44, "Melon seeds (Neri)"),
+    ("average_Melon_seeds_Neri_Powder", 45, "Melon seeds (Neri) Powder"),
+    ("average_Groundnut_Oil", 46, "Groundnut Oil"),
+    ("average_Palm_Oil", 47, "Palm Oil"),
+    ("average_Coconut_Oil", 48, "Coconut Oil"),
+    ("average_Beef", 49, "Beef"),
+    ("average_Pork", 50, "Pork"),
+    ("average_Smoked_Herring", 51, "Smoked Herring"),
+    ("average_Salted_Dried_Tilapia_Koobi", 52, "Salted Dried Tilapia (Koobi)"),
+    ("average_Anchovy", 53, "Anchovy"),
+    ("average_Kako", 54, "Kako"),
+    ("average_Egg_Commercial", 55, "Egg (Commercial)"),
+    ("average_Live_Bird", 56, "Live Bird"),
+    ("average_Chicken", 57, "Chicken"),
+    ("average_Nkontomire", 58, "Nkontomire"),
+    ("average_Ademe_Ayoyo_jute_mallow", 59, "Ademe/Ayoyo (jute mallow)"),
+    ("average_Alefu_Amaranthus", 60, "Alefu (Amaranthus)"),
+    ("average_Cabbage", 61, "Cabbage"),
+    ("average_Lettuce", 62, "Lettuce"),
+    ("average_Carrot", 63, "Carrot"),
+    ("average_Pawpaw", 64, "Pawpaw"),
+    ("average_Avocado_Pear", 65, "Avocado Pear"),
+    ("average_Bambara_Bean", 66, "Bambara Bean"),
+    ("average_Mutton_Sheep_meat", 67, "Mutton (Sheep meat)"),
+    ("average_Chevon_Goat_meat", 68, "Chevon (Goat meat)"),
+    ("average_Snail", 69, "Snail"),
+    ("average_Sweet_Potato_general_white_pinkish", 70, "Sweet Potato (white/pinkish)"),
+    ("average_Sweet_Potato_ORANGE", 71, "Sweet Potato (Orange)"),
+    ("average_Cassava_Dough", 72, "Cassava Dough"),
+    ("average_Fresh_Cow_Milk", 73, "Fresh Cow Milk"),
+    ("average_Fresh_Red_Fish", 74, "Fresh Red Fish"),
+    ("average_Fresh_Salmon_Mackerel_Fish", 75, "Fresh Salmon (Mackerel) Fish"),
+    ("average_Fresh_Kpanla_Fish", 76, "Fresh Kpanla Fish"),
+    ("average_Plantain_Riped", 77, "Plantain (Riped)"),
+]
+# Lookup dicts derived from the table above
+LABELS = {code: name for code, _num, name in LABELS_RAW}
+LABELS_NUM = {code: num for code, num, _name in LABELS_RAW}
 
 BASE_URL = "https://eu.kobotoolbox.org/api/v2/assets"
 DEFAULT_ASSETS = {
@@ -167,12 +171,20 @@ def tidy_data(df):
     df = df.melt(
         id_vars=id_cols, value_vars=avg_cols, var_name="commodity", value_name="Price"
     )
+
+    # Commodity labels and number from labels_df
     df["commodity_name"] = df["commodity"].map(LABELS).fillna(df["commodity"])
+    df["commodity_number"] = df["commodity"].map(LABELS_NUM)
+
     if "X4" in df.columns:
         df["market_day"] = pd.to_datetime(df["X4"], dayfirst=True, errors="coerce")
         df["Year"] = df["market_day"].dt.year
         df["Month"] = df["market_day"].dt.month
-        df["Week"] = df["market_day"].dt.isocalendar().week.astype("Int64")
+        # rWeek: ISO week of year (18, 19, 20 …) — matches your original rWeek
+        df["rWeek"] = df["market_day"].dt.isocalendar().week.astype("Int64")
+        # week: week of month (1–5) — matches your original week
+        df["week"] = ((df["market_day"].dt.day - 1) // 7 + 1).astype("Int64")
+
     df["Price"] = pd.to_numeric(df["Price"], errors="coerce")
     df = df.dropna(subset=["Price"])
     df["Type"] = df["source"]
@@ -210,8 +222,8 @@ with st.sidebar:
     )
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.title("🌽 Market Price Monitor")
-st.caption("Agricultural market price data — KoBo Collect")
+st.title("🌽 MOFA SRID Market Price Monitor")
+st.caption("Agricultural market price data")
 
 # ── DOWNLOAD RUNS FIRST — before any st.stop() ───────────────────────────────
 if download_btn:
@@ -298,9 +310,14 @@ display_cols = [
     c
     for c in [
         "market_day",
+        "Year",
+        "Month",
+        "rWeek",
+        "week",
         "region",
         "district",
         "Market",
+        "commodity_number",
         "commodity_name",
         "Price",
         "Type",
@@ -378,4 +395,4 @@ with dl2:
     )
 
 st.markdown("---")
-st.caption("Built by ICT Unit · Data source: KoBo Collect (eu.kobotoolbox.org)")
+st.caption("Built by ICT & Data Management Unit @SRID · Visit us: srid.mofa.gov.gh")
