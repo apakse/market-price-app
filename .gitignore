@@ -1,0 +1,8 @@
+# Never commit credentials to GitHub
+.streamlit/secrets.toml
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.env
