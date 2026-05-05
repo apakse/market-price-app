@@ -503,9 +503,15 @@ with tab2:
     with mc1:
         map_commodity = st.selectbox("Commodity", all_commodities, key="map_comm")
     with mc2:
-        map_month = st.selectbox("Month",
-                                 [f"{MONTH_NAMES[m]} ({m})" for m in available_months],
-                                 index=len(available_months)-1, key="map_month")
+        current_month = datetime.now().month
+        month_options = [f"{MONTH_NAMES[m]} ({m})" for m in available_months]
+        # default to current month if present, else latest
+        default_month_idx = next(
+            (i for i, m in enumerate(available_months) if m == current_month),
+            len(available_months) - 1
+        )
+        map_month = st.selectbox("Month", month_options,
+                                 index=default_month_idx, key="map_month")
         map_month_num = int(map_month.split("(")[1].rstrip(")"))
     with mc3:
         map_type = st.selectbox("Price type", ["retail","wholesale"], key="map_type")
@@ -542,7 +548,7 @@ with tab2:
                    f"Check the debug panel above for region name mismatches.")
     else:
         m = build_map(map_df, map_commodity, map_month_num, map_type)
-        st_folium(m, width=None, height=520, returned_objects=[])
+        st_folium(m, height=500, use_container_width=True, returned_objects=[])
 
     st.markdown("---")
 
