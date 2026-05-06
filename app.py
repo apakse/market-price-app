@@ -712,7 +712,10 @@ legend.addTo(map);
 # SIDEBAR — clean: just download button + credentials (hidden if secrets set)
 # ════════════════════════════════════════════════════════════════════════════
 with st.sidebar:
-    st.markdown("## 🫘🌶️🥩🌽 MpData")
+    st.markdown(
+        "## <span style='color: #2E7D32;'>🫘🌶️🥩🌽🥭 Price Monitor</span>",
+        unsafe_allow_html=True,
+    )
 
     has_secrets = bool(get_secret("username"))
     if has_secrets:
@@ -736,7 +739,7 @@ with st.sidebar:
 # HEADER
 # ════════════════════════════════════════════════════════════════════════════
 # st.title("🌽 MOFA SRID Price Monitor")
-st.caption("MOFA SRID Live Agricultural market price data — All Prices are Per Kg")
+st.caption("MOFA SRID Live Agricultural Commodity Price Data — All Prices are Per Kg")
 
 # ── Download ──────────────────────────────────────────────────────────────────
 if download_btn:
