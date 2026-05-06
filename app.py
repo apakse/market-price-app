@@ -712,7 +712,7 @@ legend.addTo(map);
 # SIDEBAR — clean: just download button + credentials (hidden if secrets set)
 # ════════════════════════════════════════════════════════════════════════════
 with st.sidebar:
-    st.markdown("## 🌽 MpData")
+    st.markdown("## 🫘🌶️🥩🌽 MpData")
 
     has_secrets = bool(get_secret("username"))
     if has_secrets:
@@ -735,8 +735,8 @@ with st.sidebar:
 # ════════════════════════════════════════════════════════════════════════════
 # HEADER
 # ════════════════════════════════════════════════════════════════════════════
-# st.title("🌽 Mpogidi Price Monitor")
-st.caption("Live Agricultural market price data — All Prices are Per Kg")
+# st.title("🌽 MOFA SRID Price Monitor")
+st.caption("MOFA SRID Live Agricultural market price data — All Prices are Per Kg")
 
 # ── Download ──────────────────────────────────────────────────────────────────
 if download_btn:
@@ -773,7 +773,9 @@ df = st.session_state["df"]
 # ════════════════════════════════════════════════════════════════════════════
 # TABS
 # ════════════════════════════════════════════════════════════════════════════
-tab1, tab2, tab3 = st.tabs(["📊 Data View", "🗺️ Analytics", "💾 Export Data"])
+tab1, tab2, tab3 = st.tabs(
+    ["📊 Data View & Trend Analytics", "🗺️ Geo Analytics & Prediction", "💾 Export Data"]
+)
 
 # ── TAB 1: Data ───────────────────────────────────────────────────────────────
 with tab1:
@@ -1119,5 +1121,5 @@ with tab3:
 
 st.markdown("---")
 st.caption(
-    "Built on Live data from few Districts; contact msu@srid.mofa.gov.gh for Validated Comprehensive Datasets"
+    "Built on Live data from Markets; contact msu@srid.mofa.gov.gh for Validated & Comprehensive Datasets"
 )
